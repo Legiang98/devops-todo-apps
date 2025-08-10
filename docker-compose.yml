@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  todo-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: todo-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - MONGODB_URI=mongodb://todo-mongo:27017/todoapp
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - todo-mongo
+    networks:
+      - todo-network
+
+  todo-mongo:
+    image: mongo:7-jammy
+    container_name: todo-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=todoapp
+    volumes:
+      - todo-data:/data/db
+    restart: unless-stopped
+    networks:
+      - todo-network
+
+  todo-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: todo-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - BACKEND_HOST=todo-backend
+      - BACKEND_PORT=3001
+      - BACKEND_URL=http://todo-backend:3001/
+    depends_on:
+      - todo-backend
+    restart: unless-stopped
+    networks:
+      - todo-network
+
+networks:
+  todo-network:
+    driver: bridge
+
+volumes:
+  todo-data:

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Todo App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 My Todo App</h1>
+        </header>
+        
+        <main>
+            <div class="add-todo-section">
+                <input type="text" id="todoInput" placeholder="Enter a new todo..." />
+                <button id="addBtn">Add Todo</button>
+            </div>
+            
+            <div class="todos-section">
+                <h2>Your Todos</h2>
+                <ul id="todoList">
+                    <!-- Todos will be dynamically added here -->
+                </ul>
+            </div>
+            
+            <div class="stats">
+                <span id="totalCount">0</span> total | 
+                <span id="completedCount">0</span> completed | 
+                <span id="pendingCount">0</span> pending
+            </div>
+        </main>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
